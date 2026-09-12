@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/AiMeetingAssistant.API/AiMeetingAssistant.API.csproj" />
     <Project Path="src/AiMeetingAssistant.Application/AiMeetingAssistant.Application.csproj" />
     <Project Path="src/AiMeetingAssistant.Desktop/AiMeetingAssistant.Desktop.csproj" />
     <Project Path="src/AiMeetingAssistant.Domain/AiMeetingAssistant.Domain.csproj" />
