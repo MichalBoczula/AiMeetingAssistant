@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <UserSecretsId>c7a809b6-8a59-426f-9e01-9e1f2aa4bfd3</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../AiMeetingAssistant.Application/AiMeetingAssistant.Application.csproj" />
+    <ProjectReference Include="../AiMeetingAssistant.Domain/AiMeetingAssistant.Domain.csproj" />
+    <ProjectReference Include="../AiMeetingAssistant.Infrastructure/AiMeetingAssistant.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
