@@ -1,21 +1,19 @@
-using AiMeetingAssistant.Desktop.Platforms.Windows;
-using AiMeetingAssistant.Desktop.Services.Concrete;
+using Avalonia;
 
 namespace AiMeetingAssistant.Desktop;
 
 public static class Program
 {
-    public static async Task Main()
+    [STAThread]
+    public static void Main(string[] args)
     {
-        if (!OperatingSystem.IsWindows())
-        {
-            throw new PlatformNotSupportedException("Manual screen capture is currently supported only on Windows.");
-        }
+        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    }
 
-        var screenCaptureService = new WindowsScreenCaptureService();
-        var screenCaptureStorageService = new ScreenCaptureFileStorageService();
-
-        var screenCapture = await screenCaptureService.CaptureAsync();
-        await screenCaptureStorageService.SaveAsync(screenCapture);
+    private static AppBuilder BuildAvaloniaApp()
+    {
+        return AppBuilder
+            .Configure<App>()
+            .UsePlatformDetect();
     }
 }

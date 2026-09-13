@@ -17,6 +17,9 @@
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Include="Assets/**" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="../AiMeetingAssistant.Application/AiMeetingAssistant.Application.csproj" />
     <ProjectReference Include="../AiMeetingAssistant.Infrastructure/AiMeetingAssistant.Infrastructure.csproj" />
   </ItemGroup>
