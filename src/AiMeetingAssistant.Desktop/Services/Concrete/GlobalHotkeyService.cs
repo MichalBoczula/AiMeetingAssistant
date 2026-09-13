@@ -6,7 +6,7 @@ namespace AiMeetingAssistant.Desktop.Services.Concrete;
 
 public sealed class GlobalHotkeyService : IGlobalHotkeyService
 {
-    public const string ShortcutDisplayText = "Left Ctrl + Left Alt + Left Shift + A";
+    public const string ShortcutDisplayText = "Left Ctrl + Left Alt + Left Shift + F";
 
     private static readonly KeyCode[] RequiredModifierKeys =
     [
@@ -66,7 +66,7 @@ public sealed class GlobalHotkeyService : IGlobalHotkeyService
         {
             _pressedKeys.Add(eventArgs.Data.KeyCode);
 
-            if (eventArgs.Data.KeyCode == KeyCode.VcA &&
+            if (eventArgs.Data.KeyCode == KeyCode.VcF &&
                 !_isShortcutKeyPressed &&
                 RequiredModifierKeys.All(_pressedKeys.Contains))
             {
@@ -87,7 +87,7 @@ public sealed class GlobalHotkeyService : IGlobalHotkeyService
         {
             _pressedKeys.Remove(eventArgs.Data.KeyCode);
 
-            if (eventArgs.Data.KeyCode == KeyCode.VcA)
+            if (eventArgs.Data.KeyCode == KeyCode.VcF)
             {
                 _isShortcutKeyPressed = false;
             }
