@@ -9,7 +9,7 @@
   <TrayIcon.Icons>
     <TrayIcons>
       <TrayIcon Icon="/Assets/ai-meeting-assistant.ico"
-                ToolTipText="AI Meeting Assistant">
+                ToolTipText="AI Meeting Assistant — hotkey: Left Ctrl + Left Alt + Left Shift + A">
         <TrayIcon.Menu>
           <NativeMenu>
             <NativeMenuItem Header="Exit"
