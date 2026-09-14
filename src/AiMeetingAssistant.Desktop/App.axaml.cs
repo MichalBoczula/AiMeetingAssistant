@@ -11,9 +11,14 @@ namespace AiMeetingAssistant.Desktop;
 
 public partial class App : Application
 {
+    private const string AnalyzeScreenshotEndpointEnvironmentVariable = "AI_MEETING_ASSISTANT_ANALYZE_SCREENSHOT_ENDPOINT";
+
+    private readonly HttpClient _httpClient = new();
     private readonly ScreenCaptureFileStorageService _screenCaptureStorageService = new();
+    private readonly string _sessionId = Guid.NewGuid().ToString("N");
     private IGlobalHotkeyService? _globalHotkeyService;
     private IScreenCaptureService? _screenCaptureService;
+    private IScreenshotAnalysisRequestSender? _screenshotAnalysisRequestSender;
     private int _isScreenCaptureInProgress;
 
     public override void Initialize()
@@ -31,6 +36,7 @@ public partial class App : Application
         if (OperatingSystem.IsWindows())
         {
             _screenCaptureService = new WindowsScreenCaptureService();
+            _screenshotAnalysisRequestSender = CreateScreenshotAnalysisRequestSender();
             _globalHotkeyService = new GlobalHotkeyService();
             _globalHotkeyService.HotkeyPressed += HandleHotkeyPressed;
             _globalHotkeyService.Start();
@@ -46,6 +52,8 @@ public partial class App : Application
             _globalHotkeyService.HotkeyPressed -= HandleHotkeyPressed;
             _globalHotkeyService.Dispose();
         }
+
+        _httpClient.Dispose();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -72,6 +80,14 @@ public partial class App : Application
         {
             var screenCapture = await screenCaptureService.CaptureAsync();
             await _screenCaptureStorageService.SaveAsync(screenCapture);
+
+            if (_screenshotAnalysisRequestSender is not null)
+            {
+                await _screenshotAnalysisRequestSender.SendAsync(
+                    screenCapture,
+                    _sessionId,
+                    Guid.NewGuid().ToString("N"));
+            }
         }
         catch (Exception exception)
         {
@@ -81,5 +97,24 @@ public partial class App : Application
         {
             Volatile.Write(ref _isScreenCaptureInProgress, 0);
         }
+    }
+
+    private IScreenshotAnalysisRequestSender? CreateScreenshotAnalysisRequestSender()
+    {
+        var endpoint = Environment.GetEnvironmentVariable(AnalyzeScreenshotEndpointEnvironmentVariable);
+
+        if (string.IsNullOrWhiteSpace(endpoint))
+        {
+            Debug.WriteLine($"The {AnalyzeScreenshotEndpointEnvironmentVariable} environment variable is not configured.");
+            return null;
+        }
+
+        if (!Uri.TryCreate(endpoint, UriKind.Absolute, out var analyzeScreenshotEndpoint))
+        {
+            Debug.WriteLine($"The {AnalyzeScreenshotEndpointEnvironmentVariable} environment variable is invalid.");
+            return null;
+        }
+
+        return new FunctionScreenshotAnalysisRequestSender(_httpClient, analyzeScreenshotEndpoint);
     }
 }

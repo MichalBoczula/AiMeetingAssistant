@@ -7,5 +7,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/AiMeetingAssistant.Application.UnitTests/AiMeetingAssistant.Application.UnitTests.csproj" />
+    <Project Path="tests/AiMeetingAssistant.Desktop.UnitTests/AiMeetingAssistant.Desktop.UnitTests.csproj" />
   </Folder>
 </Solution>
