@@ -21,3 +21,13 @@ npm install
 ```
 
 No capture, AI, authentication, persistence, or UI behaviour is implemented in this starter. This commit intentionally creates only the structure and dependency manifests.
+
+## Desktop screenshot delivery
+
+The Desktop application sends a captured screen to the Function only when the following environment variable contains the complete Function endpoint:
+
+```text
+AI_MEETING_ASSISTANT_ANALYZE_SCREENSHOT_ENDPOINT=https://<function-app>/api/analyze-screenshot
+```
+
+Each request is sent as `multipart/form-data` with `file`, `sessionId` and `requestId`. The Desktop process keeps one `sessionId` for its lifetime and creates a new `requestId` per capture.
