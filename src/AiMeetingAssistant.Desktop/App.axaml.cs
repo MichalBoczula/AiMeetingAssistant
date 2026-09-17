@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using AiMeetingAssistant.Desktop.Platforms.Windows;
 using AiMeetingAssistant.Desktop.Services.Abstract;
 using AiMeetingAssistant.Desktop.Services.Concrete;
+using Microsoft.Extensions.Configuration;
 
 namespace AiMeetingAssistant.Desktop;
 
@@ -105,13 +106,20 @@ public partial class App : Application
 
         if (string.IsNullOrWhiteSpace(endpoint))
         {
-            Debug.WriteLine($"The {AnalyzeScreenshotEndpointEnvironmentVariable} environment variable is not configured.");
+            endpoint = new ConfigurationBuilder()
+                .AddJsonFile(Path.Combine(AppContext.BaseDirectory, "appsettings.json"), optional: true)
+                .Build()[AnalyzeScreenshotEndpointEnvironmentVariable];
+        }
+
+        if (string.IsNullOrWhiteSpace(endpoint))
+        {
+            Debug.WriteLine($"The {AnalyzeScreenshotEndpointEnvironmentVariable} setting is not configured.");
             return null;
         }
 
         if (!Uri.TryCreate(endpoint, UriKind.Absolute, out var analyzeScreenshotEndpoint))
         {
-            Debug.WriteLine($"The {AnalyzeScreenshotEndpointEnvironmentVariable} environment variable is invalid.");
+            Debug.WriteLine($"The {AnalyzeScreenshotEndpointEnvironmentVariable} setting is invalid.");
             return null;
         }
 
